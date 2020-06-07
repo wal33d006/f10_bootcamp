@@ -1,3 +1,4 @@
+import 'package:f10_bootcamp/login_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -29,6 +30,24 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  List<User> myUsers = [
+    User(
+      name: 'Waleed',
+      email: 'waleed@gmail.com',
+      phoneNumber: '03453535343',
+    ),
+    User(
+      name: 'Shakir',
+      email: 'shakir@gmail.com',
+      phoneNumber: '986457398457',
+    ),
+    User(
+      name: 'Hello World',
+      email: 'hello@gmail.com',
+      phoneNumber: '343457',
+    ),
+  ];
+
   void _incrementCounter() {
     setState(() {
       _counter++;
@@ -41,67 +60,35 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Column(
-        children: <Widget>[
-          ListTile(
-            leading: CircleAvatar(
-              child: Text('WA'),
-            ),
-            title: Text('Waleed Arshad'),
-            subtitle: Text('waleed@gmail.com'),
-            trailing: Icon(Icons.arrow_forward),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              child: Text('WA'),
-            ),
-            title: Text('Waleed Arshad'),
-            subtitle: Text('waleed@gmail.com'),
-            trailing: Icon(Icons.arrow_forward),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              child: Text('WA'),
-            ),
-            title: Text('Waleed Arshad'),
-            subtitle: Text('waleed@gmail.com'),
-            trailing: Icon(Icons.arrow_forward),
-          ),
-          ListTile(
-            leading: CircleAvatar(
-              child: Text('WA'),
-            ),
-            title: Text('Waleed Arshad'),
-            subtitle: Text('waleed@gmail.com'),
-            trailing: Icon(Icons.arrow_forward),
-          ),
-          ListTile(
-            title: TextFormField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your name'
-              ),
-            ),
-          ),
-          RaisedButton(
-            onPressed: () {},
-            color: Colors.green,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0)
-            ),
-            child: Text('Login'),
-          ),
-//          Text(
-//            '$_counter',
-//            style: Theme.of(context).textTheme.headline4,
-//          ),
-        ],
+      body: ListView.builder(
+        itemCount: myUsers.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(myUsers[index].name),
+            subtitle: Text(myUsers[index].email),
+            trailing: Text(myUsers[index].phoneNumber),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
+            ),
+          );
+        },
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ),
     );
   }
+}
+
+class User {
+  String name;
+  String email;
+  String phoneNumber;
+
+  User({this.email, this.name, this.phoneNumber});
 }
