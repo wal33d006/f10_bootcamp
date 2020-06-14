@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:f10_bootcamp/covid_api.dart';
 import 'package:f10_bootcamp/covid_model.dart';
-import 'package:f10_bootcamp/login_screen.dart';
+import 'package:f10_bootcamp/firebase.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import 'dots_indicator.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,9 +21,66 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: SplashScreen(),
     );
   }
+}
+
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+
+  PageController controller = PageController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: <Widget>[
+          Expanded(
+            child: Center(
+              child: PageView(
+                controller: controller,
+                children: <Widget>[
+                  Center(child: Text('Page 1'),),
+                  Center(child: Text('Page 2'),),
+                  Center(child: Text('Page 3'),),
+                  Center(child: Text('Page 4'),),
+                ],
+              ),
+            ),
+          ),
+          SafeArea(
+            child: DotsIndicator(
+              controller: controller,
+              itemCount: 4,
+              activeColor: Theme.of(context).accentColor,
+              inactiveColor: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /*void _waitForTwoSeconds() async {
+    await Future.delayed(Duration(seconds: 2), () {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => MyHomePage(),
+        ),
+      );
+    });
+  }*/
 }
 
 class MyHomePage extends StatefulWidget {
@@ -68,80 +129,108 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _addMarker();
     _fetchData();
+  }
+
+  static final CameraPosition _kGooglePlex = CameraPosition(
+    target: LatLng(24.801845, 67.030685),
+    zoom: 14.4746,
+  );
+
+  Completer<GoogleMapController> _controller = Completer();
+
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+
+  void _addMarker() {
+    MarkerId markerId = MarkerId('123');
+    final Marker marker = Marker(
+        markerId: markerId,
+        position: LatLng(24.801845, 67.030685),
+        infoWindow: InfoWindow(title: 'Hyperstar'));
+
+    setState(() {
+      markers[markerId] = marker;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+      body: GoogleMap(
+        mapType: MapType.normal,
+        initialCameraPosition: _kGooglePlex,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+        markers: Set<Marker>.of(markers.values),
       ),
-      body: Column(
-        children: [
-//          Expanded(
-//            child: ListView.builder(
-//              itemCount: myUsers.length,
-//              itemBuilder: (context, index) {
-//                return ListTile(
-//                  title: Text(myUsers[index].name),
-//                  subtitle: Text(myUsers[index].email),
-//                  trailing: Text(myUsers[index].phoneNumber),
-//                );
+
+//      Column(
+//        children: [
+////          Expanded(
+////            child: ListView.builder(
+////              itemCount: myUsers.length,
+////              itemBuilder: (context, index) {
+////                return ListTile(
+////                  title: Text(myUsers[index].name),
+////                  subtitle: Text(myUsers[index].email),
+////                  trailing: Text(myUsers[index].phoneNumber),
+////                );
+////              },
+////            ),
+////          ),
+//          ListTile(
+//            title: Text('Stateful widget'),
+//            trailing: GestureDetector(
+//              onTap: () {
+//                setState(() {
+//                  iconColor = Colors.blue;
+//                  icon = Icons.favorite;
+//                });
 //              },
+//              child: Icon(
+//                icon,
+//                color: iconColor,
+//              ),
 //            ),
 //          ),
-          ListTile(
-            title: Text('Stateful widget'),
-            trailing: GestureDetector(
-              onTap: () {
-                setState(() {
-                  iconColor = Colors.blue;
-                  icon = Icons.favorite;
-                });
-              },
-              child: Icon(
-                icon,
-                color: iconColor,
-              ),
-            ),
-          ),
-          WaleedWidget(
-              firstName: Text('Waleed'),
-              lastName: Text('Arshad'),
-              leading: CircleAvatar(
-                child: Text('WA'),
-              ),
-              trailing: Icon(Icons.format_quote)),
-          _isLoading ? CircularProgressIndicator() : Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  title: Text(globalInfo.cases.toString()),
-                  subtitle: Text('Cases'),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Text(globalInfo.deaths.toString()),
-                  subtitle: Text('Deaths'),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Text(globalInfo.recovered.toString()),
-                  subtitle: Text('Recovered'),
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
+//          WaleedWidget(
+//              firstName: Text('Waleed'),
+//              lastName: Text('Arshad'),
+//              leading: CircleAvatar(
+//                child: Text('WA'),
+//              ),
+//              trailing: Icon(Icons.format_quote)),
+//          _isLoading ? CircularProgressIndicator() : Column(
+//            children: <Widget>[
+//              Card(
+//                child: ListTile(
+//                  title: Text(globalInfo.cases.toString()),
+//                  subtitle: Text('Cases'),
+//                ),
+//              ),
+//              Card(
+//                child: ListTile(
+//                  title: Text(globalInfo.deaths.toString()),
+//                  subtitle: Text('Deaths'),
+//                ),
+//              ),
+//              Card(
+//                child: ListTile(
+//                  title: Text(globalInfo.recovered.toString()),
+//                  subtitle: Text('Recovered'),
+//                ),
+//              ),
+//            ],
+//          ),
+//        ],
+//      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => LoginScreen(),
+              builder: (context) => FirebaseScreen(),
             ),
           );
         },

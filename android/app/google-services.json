@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "794480056288",
+    "firebase_url": "https://f10bootcamp.firebaseio.com",
+    "project_id": "f10bootcamp",
+    "storage_bucket": "f10bootcamp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794480056288:android:5ab0183f30c05f9da77d85",
+        "android_client_info": {
+          "package_name": "com.example.f10_bootcamp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "794480056288-3fdvjenk5nv82qn5lmh4pcoc2nlgrapn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFZ9qN8nS72KdxcEeSBLIJVhdpAM9Wpg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "794480056288-3fdvjenk5nv82qn5lmh4pcoc2nlgrapn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "794480056288-e3ro4sevsnov6l9p038puanmfteapbph.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.f10Bootcamp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
